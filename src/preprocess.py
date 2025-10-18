@@ -69,7 +69,7 @@ def preprocess_data(data, is_single_sample=False):
         'education', 'balance', 'housing', 'day', 'duration', 'campaign', 'pdays',
         'month_sin', 'month_cos', 'job_blue-collar', 'job_entrepreneur', 'job_housemaid',
         'job_management', 'job_retired', 'job_self-employed', 'job_services', 'job_student',
-        'job_technician', 'job_unemployed', 'marital_married', 'marital_single',
+        'job_technician', 'job_unemployed', 'job_unknown', 'marital_married', 'marital_single',
         'contact_telephone', 'contact_unknown', 'poutcome_other', 'poutcome_success',
         'poutcome_unknown', 'age_adult', 'age_middle_aged', 'age_senior'
     ]
