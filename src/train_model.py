@@ -14,7 +14,7 @@ def split_features_target(df):
     y = df['subscribed']
     return X, y
 
-def create_pipeline(random_state=42):
+def create_pipeline(random_state=74):
     """
     Create a pipeline with preprocessing, SMOTE, scaling, and Random Forest
     """
@@ -22,16 +22,17 @@ def create_pipeline(random_state=42):
         ('smote', SMOTE(random_state=random_state,k_neighbors=5)),
         ('scaler', RobustScaler()),
         ('model', RandomForestClassifier(
-            n_estimators=100,
-            random_state=42,
-            max_depth=15,
-            min_samples_split=10,
-            class_weight='balanced',
-            n_jobs=-1
+            n_estimators=168,
+            max_depth=14,
+            max_features='sqrt',
+            min_samples_split=9,
+            min_samples_leaf=4,
+            bootstrap=False,
+            random_state=74
         ))
     ])
 
-def train(X, y, random_state=42):
+def train(X, y, random_state=74):
     """
     Train the model and evaluate its performance
     """
@@ -72,7 +73,7 @@ def main():
     # Save model artifacts
     save_model_artifacts(pipeline, X.columns)
     
-    print("\nTraining pipeline completed successfully!")
+    print("\nTraining pipeline completed successfully")
 
 if __name__ == "__main__":
     main()
