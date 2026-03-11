@@ -1,3 +1,36 @@
-# Ignore data folder only
+# Data (raw/processed/exports)
 data/
+dataset/
+datasets/
+raw_data/
+processed_data/
+interim_data/
+external_data/
+outputs/
+predictions/
+
+# Models / artifacts
+models/
+model/
+artifacts/
+checkpoints/
+runs/
+
+# Common serialized model files
+*.pkl
+*.pickle
+*.joblib
+*.sav
+*.h5
+*.hdf5
+*.pt
+*.pth
+*.onnx
+*.cbm
+*.model
+*.bin
+
+# Experiment tracking
+mlruns/
+wandb/
 
