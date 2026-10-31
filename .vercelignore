@@ -1,0 +1,12 @@
+# Training and analysis inputs are not needed at inference time.
+data/
+notebooks/
+reports/
+
+# The Docker workflow is separate from Vercel's native Python runtime.
+Dockerfile
+requirements-docker.txt
+
+# Training and batch-prediction utilities are not imported by the API.
+src/train_model.py
+src/predict.py

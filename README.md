@@ -40,6 +40,7 @@ A machine learning solution designed to predict the success of bank marketing ca
 │   └── 03_Modeling.ipynb                   # Model development and evaluation
 ├── reports/                                # Project documentation
 │   └── Bank_Marketing_Report.md
+├── app.py                                  # Vercel Python entry point
 └── src/                                    # Source code
     ├── __init__.py                          # Source package marker
     ├── api.py                              # FastAPI endpoints
@@ -80,9 +81,10 @@ cd Bank-Marketing-Prediction
 pip install -r requirements.txt
 ```
 
-The full `requirements.txt` includes the dependencies used for training,
-notebooks, analysis, and the API. Docker installs only the API runtime
-dependencies from `requirements-docker.txt` to keep the image smaller.
+`requirements.txt` contains the dependencies needed by the API and the
+serialized inference pipeline. Notebook and visualization dependencies are
+kept out of the deployment environment. Docker installs the equivalent API
+runtime dependencies from `requirements-docker.txt`.
 
 ### Docker
 
@@ -129,20 +131,22 @@ This will:
 
 #### Using the Web GUI
 
-Start the API in one terminal:
+Start the API locally:
 
 ```bash
 uvicorn src.api:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Then serve the static frontend in another terminal from the project root:
-
-```bash
-python3 -m http.server 5500 --directory frontend
-```
-
-Open `http://localhost:5500`, fill in the client information, and click
+Open `http://localhost:8000`, fill in the client information, and click
 **Predict**. The **Randomise inputs** button creates a sample for a quick demo.
+
+### Vercel deployment
+
+Vercel detects [`app.py`](./app.py) as the native Python entry point. The
+FastAPI application serves the existing `frontend/` directory and the
+prediction API from the same origin, so no separate frontend project or
+rewrite configuration is required. Connect the repository to Vercel with the
+**Python** framework preset and leave the build command empty.
 
 #### Using the API
 
