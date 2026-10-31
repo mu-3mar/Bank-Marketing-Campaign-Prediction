@@ -38,3 +38,9 @@ temp.html
 .env.*
 !.env.example
 *.pem
+
+
+
+#data 
+data/submission
+*.csv
