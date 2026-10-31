@@ -3,6 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.103.2-teal.svg)](https://fastapi.tiangolo.com/)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3.1-orange.svg)](https://scikit-learn.org/)
+[![Docker Image](https://img.shields.io/docker/v/mu3mar/bank-marketing-api?label=Docker%20Image)](https://hub.docker.com/r/mu3mar/bank-marketing-api)
 
 ## 🎯 Project Overview
 
@@ -15,6 +16,7 @@ A machine learning solution designed to predict the success of bank marketing ca
 - **RESTful API**: FastAPI-based endpoint for real-time predictions
 - **Interactive Web GUI**: Static HTML/CSS/JavaScript frontend with random inputs, probability meter, and prediction result
 - **Comprehensive Analysis**: Detailed Jupyter notebooks covering EDA, preprocessing, and modeling
+- **Dockerized Deployment**: Ready-to-run Docker image published on [Docker Hub](https://hub.docker.com/r/mu3mar/bank-marketing-api)
 - **Production-Ready**: Scalable architecture with proper error handling and logging
 
 ## 🗂️ Project Structure
@@ -76,6 +78,35 @@ cd Bank-Marketing-Prediction
 
 ```bash
 pip install -r requirements.txt
+```
+
+The full `requirements.txt` includes the dependencies used for training,
+notebooks, analysis, and the API. Docker installs only the API runtime
+dependencies from `requirements-docker.txt` to keep the image smaller.
+
+### Docker
+
+The API is Dockerized and the production image is available on
+[Docker Hub](https://hub.docker.com/r/mu3mar/bank-marketing-api).
+
+Pull and run the published image:
+
+```bash
+docker pull mu3mar/bank-marketing-api:latest
+docker run --rm -p 8000:8000 mu3mar/bank-marketing-api:latest
+```
+
+The API will be available at `http://localhost:8000`. The interactive frontend
+can then be served separately from the project root:
+
+```bash
+python3 -m http.server 5500 --directory frontend
+```
+
+To build the image locally instead:
+
+```bash
+docker build -t bank-marketing-api .
 ```
 
 ## 💻 Usage
