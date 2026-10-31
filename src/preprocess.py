@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import os
+from pathlib import Path
 
 def preprocess_data(data, is_single_sample=False):
     """
@@ -101,7 +101,7 @@ def preprocess_file(input_path, output_path=None):
     
     # Save if output path is provided
     if output_path:
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
         preprocessed_data.to_csv(output_path, index=False)
         print(f"Preprocessed data saved to: {output_path}")
     

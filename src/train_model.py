@@ -1,11 +1,13 @@
 import pandas as pd
 import numpy as np
 import joblib
-import os
+from pathlib import Path
 from sklearn.preprocessing import RobustScaler
 from imblearn.over_sampling import SMOTE
 from imblearn.pipeline import Pipeline as ImbPipeline
 from sklearn.ensemble import RandomForestClassifier
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 def split_features_target(df):
@@ -44,24 +46,25 @@ def train(X, y, random_state=74):
     
     return pipeline
 
-def save_model_artifacts(pipeline, feature_names, output_dir='models'):
+def save_model_artifacts(pipeline, feature_names, output_dir=None):
     """Save model pipeline and feature names"""
-    os.makedirs(output_dir, exist_ok=True)
+    output_dir = Path(output_dir or PROJECT_ROOT / 'models')
+    output_dir.mkdir(parents=True, exist_ok=True)
     
     # Save pipeline
-    model_path = os.path.join(output_dir, 'model_pipeline.joblib')
+    model_path = output_dir / 'model_pipeline.joblib'
     joblib.dump(pipeline, model_path)
     print(f"\nModel saved to: {model_path}")
     
     # Save feature names
-    features_path = os.path.join(output_dir, 'feature_names.joblib')
+    features_path = output_dir / 'feature_names.joblib'
     joblib.dump(feature_names, features_path)
     print(f"Feature names saved to: {features_path}")
 
 def main():
     # Load preprocessed data
     print("Loading preprocessed data...")
-    processed_data = pd.read_csv('data/processed/train_preprocessed.csv')
+    processed_data = pd.read_csv(PROJECT_ROOT / 'data' / 'processed' / 'train_preprocessed.csv')
     
     # Split features and target
     X, y = split_features_target(processed_data)

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eef7f6">
+  <title>BankReach — Term Deposit Prediction</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page">
+    <header class="brand-bar">
+      <a class="brand" href="#top" aria-label="BankReach home">
+        <span class="brand-mark"><iframe class="brand-logo-frame" src="./logo-animated.html?color=%23F04B24&amp;v=2" title="Animated BankReach logo" aria-label="Animated BankReach logo" tabindex="-1"></iframe></span>
+        <span><strong>BankReach</strong><small>TERM DEPOSIT PREDICTOR</small></span>
+      </a>
+      <div class="api-pill"><span class="live-dot"></span><span id="api-status">Checking API…</span></div>
+    </header>
+
+    <section class="intro" id="top">
+      <p class="eyebrow">BANK MARKETING CAMPAIGN · ML DEMO</p>
+      <h1>Find your next <em>best customer.</em></h1>
+      <p class="intro-copy">Enter campaign and customer details to estimate the likelihood of a term-deposit subscription.</p>
+    </section>
+
+    <div class="notice"><span>i</span><p><strong>Decision support only.</strong> This model is a statistical estimate and should be used with professional judgment.</p></div>
+
+    <form id="prediction-form" novalidate>
+      <section class="form-card">
+        <div class="card-heading"><div><span class="step">01</span><h2>Customer profile</h2></div><p>Personal information</p></div>
+        <div class="field-grid">
+          <label class="field"><span>Age</span><input name="age" type="number" min="18" max="100" value="41" required></label>
+          <label class="field"><span>Job</span><select name="job"><option>admin.</option><option>blue-collar</option><option>entrepreneur</option><option>housemaid</option><option selected>management</option><option>retired</option><option>self-employed</option><option>services</option><option>student</option><option>technician</option><option>unemployed</option><option>unknown</option></select></label>
+          <label class="field"><span>Marital status</span><select name="marital"><option selected>married</option><option>single</option><option>divorced</option></select></label>
+          <label class="field"><span>Education</span><select name="education"><option>primary</option><option selected>secondary</option><option>tertiary</option><option>unknown</option></select></label>
+          <label class="field"><span>Account balance</span><input name="balance" type="number" min="-10000" max="100000" value="2343" required></label>
+          <label class="field"><span>Defaulted on credit?</span><select name="default"><option selected>no</option><option>yes</option></select></label>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <div class="card-heading"><div><span class="step">02</span><h2>Campaign details</h2></div><p>Contact information</p></div>
+        <div class="field-grid">
+          <label class="field"><span>Housing loan</span><select name="housing"><option selected>yes</option><option>no</option></select></label>
+          <label class="field"><span>Personal loan</span><select name="loan"><option>yes</option><option selected>no</option></select></label>
+          <label class="field"><span>Contact method</span><select name="contact"><option selected>cellular</option><option>telephone</option><option>unknown</option></select></label>
+          <label class="field"><span>Contact month</span><select name="month"><option>jan</option><option>feb</option><option>mar</option><option>apr</option><option selected>may</option><option>jun</option><option>jul</option><option>aug</option><option>sep</option><option>oct</option><option>nov</option><option>dec</option></select></label>
+          <label class="field"><span>Day of month</span><input name="day" type="number" min="1" max="31" value="5" required></label>
+          <label class="field"><span>Call duration (seconds)</span><input name="duration" type="number" min="0" max="5000" value="123" required></label>
+          <label class="field"><span>Contacts in this campaign</span><input name="campaign" type="number" min="1" max="50" value="3" required></label>
+          <label class="field"><span>Days since previous contact</span><input name="pdays" type="number" min="-1" max="999" value="999" required><small>Use -1 if the client was not contacted before.</small></label>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <div class="card-heading"><div><span class="step">03</span><h2>Previous campaign</h2></div><p>History and outcome</p></div>
+        <div class="field-grid">
+          <label class="field"><span>Previous contacts</span><input name="previous" type="number" min="0" max="100" value="0" required></label>
+          <label class="field"><span>Previous campaign outcome</span><select name="poutcome"><option selected>unknown</option><option>success</option><option>failure</option><option>other</option></select></label>
+        </div>
+      </section>
+
+      <div class="form-actions"><button type="button" class="reset-button" id="randomize-inputs">⤨ Randomise inputs</button><button type="button" class="reset-button" id="reset-form">Reset answers</button><span>16 indicators · Local API</span><button type="submit" class="primary-button" id="submit-button">Predict <span>↗</span></button></div>
+    </form>
+
+    <section class="result-card" id="result-panel" aria-live="polite">
+      <div class="result-top"><span class="result-icon result-symbol">↗</span><div><p class="eyebrow">YOUR RESULT</p><h2 id="result-title">Your subscription prediction will appear here.</h2></div></div>
+      <p id="result-summary">Complete the customer and campaign details, then select “Predict”.</p>
+      <div class="probability-block"><div class="probability-label"><span>Estimated subscription probability</span><strong id="probability-value">—</strong></div><div class="meter"><span id="probability-meter"></span></div><div class="meter-scale"><span>0%</span><span>Model probability</span><span>100%</span></div></div>
+      <div class="error-message" id="error-message" role="alert" hidden></div>
+      <p class="result-disclaimer">This is a machine-learning estimate for demonstration, not a guarantee of customer behaviour.</p>
+    </section>
+    <footer><span>BANKREACH · BANK MARKETING PREDICTOR</span><span class="footer-credit">Designed & built by <strong>Muhammad Ammar</strong></span></footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

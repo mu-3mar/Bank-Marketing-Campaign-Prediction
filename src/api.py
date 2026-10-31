@@ -1,19 +1,34 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
-import numpy as np
-import sys
-sys.path.append("./src")
-from preprocess import preprocess_data
+from pathlib import Path
 
-# Load model
-model = joblib.load("models/model_pipeline.joblib")
+from src.preprocess import preprocess_data
 
-app = FastAPI()
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+model = joblib.load(PROJECT_ROOT / "models" / "model_pipeline.joblib")
+
+app = FastAPI(title="Bank Marketing Prediction API")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5500",
+        "http://127.0.0.1:5500",
+        "http://0.0.0.0:5500",
+        "null",
+    ],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 class InputData(BaseModel):
     # Accepts dict for single sample
     data: dict
+
+@app.get("/")
+def root():
+    return {"message": "Bank Marketing Prediction API is running"}
 
 @app.post("/predict")
 def predict(input_data: InputData):
@@ -21,6 +36,10 @@ def predict(input_data: InputData):
         # Preprocess input
         processed = preprocess_data(input_data.data, is_single_sample=True)
         prediction = model.predict(processed)
-        return {"prediction": int(prediction[0])}
+        probability = float(model.predict_proba(processed)[0, 1])
+        return {
+            "prediction": int(prediction[0]),
+            "probability": round(probability, 4),
+        }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

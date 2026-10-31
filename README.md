@@ -13,19 +13,22 @@ A machine learning solution designed to predict the success of bank marketing ca
 - **Advanced Data Preprocessing**: Robust pipeline handling numerical and categorical features
 - **Machine Learning Model**: Optimized Random Forest Classifier with SMOTE for handling class imbalance
 - **RESTful API**: FastAPI-based endpoint for real-time predictions
+- **Interactive Web GUI**: Static HTML/CSS/JavaScript frontend with random inputs, probability meter, and prediction result
 - **Comprehensive Analysis**: Detailed Jupyter notebooks covering EDA, preprocessing, and modeling
 - **Production-Ready**: Scalable architecture with proper error handling and logging
 
 ## 🗂️ Project Structure
 
 ```plaintext
-├── data/                                   # Dataset files and processed data
-│   ├── submission/real_submission.csv      # Example submission format
-│   ├── test/test.csv                       # Test dataset
-│   ├── row/train.csv                       # Training dataset
-│   └──  processed/train_preprocessed.csv   # Preprocessed training data
-├── deployment/                             # Deployment configurations
-│   └── app.py                              # FastAPI application
+├── data/                                   # Dataset inputs, outputs, and documentation
+│   ├── raw/                                # Downloaded train/test CSV files
+│   ├── processed/                          # Notebook-generated datasets
+│   ├── submission/real_submission.csv      # Example submission
+│   └── README.md                           # Dataset source and download steps
+├── frontend/                               # User-facing web interface
+│   ├── index.html                           # Application page
+│   ├── app.js                               # Form and API integration
+│   └── styles.css                           # Responsive styling
 ├── models/                                 # Saved model artifacts
 │   ├── feature_names.joblib                # Feature names for prediction
 │   └── model_pipeline.joblib               # Trained model pipeline
@@ -33,9 +36,10 @@ A machine learning solution designed to predict the success of bank marketing ca
 │   ├── 01_EDA.ipynb                        # Exploratory Data Analysis
 │   ├── 02_Preprocessing.ipynb              # Data preprocessing steps
 │   └── 03_Modeling.ipynb                   # Model development and evaluation
-├── report/                                 # Project documentation
-│    └──  Bank_Marketing_Campaign_Report.md
+├── reports/                                # Project documentation
+│   └── Bank_Marketing_Report.md
 └── src/                                    # Source code
+    ├── __init__.py                          # Source package marker
     ├── api.py                              # FastAPI endpoints
     ├── predict.py                          # Prediction utilities
     ├── preprocess.py                       # Data preprocessing functions
@@ -58,7 +62,6 @@ A machine learning solution designed to predict the success of bank marketing ca
 
 - Python 3.8 or higher
 - pip package manager
-- Virtual environment (recommended)
 
 ### Installation
 
@@ -69,15 +72,7 @@ git clone {path_to_repository}
 cd Bank-Marketing-Prediction
 ```
 
-2. Create and activate a virtual environment (optional but recommended):
-
-```bash
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-.\venv\Scripts\activate  # Windows
-```
-
-3. Install dependencies:
+2. Install dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -90,7 +85,7 @@ pip install -r requirements.txt
 To train a new model:
 
 ```bash
-python src/train_model.py
+python -m src.train_model
 ```
 
 This will:
@@ -100,6 +95,23 @@ This will:
 - Generate performance metrics
 
 ### Making Predictions
+
+#### Using the Web GUI
+
+Start the API in one terminal:
+
+```bash
+uvicorn src.api:app --reload --host 0.0.0.0 --port 8000
+```
+
+Then serve the static frontend in another terminal from the project root:
+
+```bash
+python3 -m http.server 5500 --directory frontend
+```
+
+Open `http://localhost:5500`, fill in the client information, and click
+**Predict**. The **Randomise inputs** button creates a sample for a quick demo.
 
 #### Using the API
 
@@ -120,15 +132,17 @@ data = {
         "job": "management",
         "marital": "married",
         "education": "tertiary",
+        "default": "no",
         "balance": 2343,
         "housing": "yes",
+        "loan": "no",
+        "contact": "cellular",
+        "day": 5,
+        "month": "may",
         "duration": 123,
         "campaign": 3,
         "pdays": 999,
         "previous": 0,
-        "contact": "cellular",
-        "month": "may",
-        "day": 5,
         "poutcome": "unknown"
     }
 }
@@ -165,5 +179,5 @@ The dataset contains client information and campaign results from a Portuguese b
 
 - `POST /predict`
   - Input: JSON with client features
-  - Output: Binary prediction (0/1)
+  - Output: Binary prediction (0/1) and subscription probability
   - Response time: < 100ms

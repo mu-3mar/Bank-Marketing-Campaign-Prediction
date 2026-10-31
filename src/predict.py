@@ -1,8 +1,10 @@
 import pandas as pd
-import numpy as np
 import joblib
-import os
-from preprocess import preprocess_data
+from pathlib import Path
+
+from src.preprocess import preprocess_data
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 class BankMarketingPredictor:
     def __init__(self, model_path=None, feature_names_path=None):
@@ -15,12 +17,8 @@ class BankMarketingPredictor:
         """
         if model_path is None or feature_names_path is None:
             # Get the absolute path of the project root directory
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            project_root = os.path.dirname(current_dir)
-            
-            # Set default paths
-            model_path = os.path.join(project_root, "models", "model_pipeline.joblib")
-            feature_names_path = os.path.join(project_root, "models", "feature_names.joblib")
+            model_path = PROJECT_ROOT / "models" / "model_pipeline.joblib"
+            feature_names_path = PROJECT_ROOT / "models" / "feature_names.joblib"
         
         self.model = joblib.load(model_path)
         self.feature_names = joblib.load(feature_names_path)
@@ -64,8 +62,8 @@ class BankMarketingPredictor:
             
         return results
 
-def predict_file(input_path, output_path=None, model_path='models/model_pipeline.joblib', 
-                feature_names_path='models/feature_names.joblib'):
+def predict_file(input_path, output_path=None, model_path=None,
+            feature_names_path=None):
     """
     Make predictions on a CSV file.
     
@@ -81,7 +79,9 @@ def predict_file(input_path, output_path=None, model_path='models/model_pipeline
     # Load data
     data = pd.read_csv(input_path)
     
-    # Initialize predictor
+    model_path = model_path or PROJECT_ROOT / "models" / "model_pipeline.joblib"
+    feature_names_path = feature_names_path or PROJECT_ROOT / "models" / "feature_names.joblib"
+
     predictor = BankMarketingPredictor(model_path, feature_names_path)
     
     # Make predictions
@@ -89,7 +89,8 @@ def predict_file(input_path, output_path=None, model_path='models/model_pipeline
     
     # Save if output path is provided
     if output_path:
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        output_path = Path(output_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
         predictions.to_csv(output_path, index=False)
         print(f"Predictions saved to: {output_path}")
     
@@ -100,12 +101,8 @@ if __name__ == "__main__":
     print("=======================")
     
     # Get the absolute path of the project root directory
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(current_dir)
-    
-    # Default paths
-    default_input = os.path.join(project_root, "data", "test", "test.csv")
-    default_output = os.path.join(project_root, "data", "submission", "real_submission.csv")
+    default_input = PROJECT_ROOT / "data" / "raw" / "test.csv"
+    default_output = PROJECT_ROOT / "data" / "submission" / "real_submission.csv"
     
     # Get input path from user
     print("\nInput File:")
@@ -120,7 +117,7 @@ if __name__ == "__main__":
     output_path = user_output if user_output else default_output
     
     # Create output directory if it doesn't exist
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
     
     print("\nUsing paths:")
     print(f"Input:  {input_path}")
